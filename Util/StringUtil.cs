@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CommentedList.Util {
     
-    // also in WordFinder / Util / StringSearch
+    // was also in WordFinder / Util / StringSearch
 
     public static class StringUtil {
         public static IEnumerable<int> AllIndexesOf(this string str, string value) {
@@ -23,14 +23,18 @@ namespace CommentedList.Util {
         public static IEnumerable<int> ToCodePoints(this string s) {
             // was: ToUnicodeCodePoints()
             for (int i = 0; i < s.Length; i++) {
-                int unicodeCodePoint = char.ConvertToUtf32(s, i);
-                if (unicodeCodePoint > 0xffff) {
+                int codePoint = char.ConvertToUtf32(s, i);
+                if (codePoint > 0xffff) {
                     i++;
                 }
-                yield return unicodeCodePoint;
+                yield return codePoint;
             }
         }
-
+        public static IEnumerable<string> ToCodePointStrings(this string s) {
+            foreach (var codePoint in s.ToCodePoints()) {
+                yield return char.ConvertFromUtf32(codePoint);
+            }
+        }
         public static string DistinctCodePointsAsString(this string letters) {
             // was: DistinctLetters32()
             return string.Join("", letters.ToCodePoints().OrderBy(p => p).Distinct().Select(p => char.ConvertFromUtf32(p)));

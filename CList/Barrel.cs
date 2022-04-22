@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 using CommentedList.WeightedRandomizer;
 
 namespace CommentedList.CList {
-    public class Barrel {
+    public class Barrel : IEnumerable<TaggedItem> { // : ICollection<TaggedItem> // TODO: implement ICollection
         static Random RNG = new Random();
 
         //TODO: combine to allow for simpler roundtrips
@@ -50,6 +51,22 @@ namespace CommentedList.CList {
                 if (Items == null) Items = new StaticWeightedRandomizer<TaggedItem>();
                 Items.Add(item, weight);
             }
+        }
+
+        public IEnumerator<TaggedItem> GetEnumerator() {
+            if (Items != null && RareItems != null) {
+                return (IEnumerator<TaggedItem>)Items.Concat(RareItems);
+            } else if (Items != null) {
+                return Items.GetEnumerator();
+            } else if (RareItems != null){
+                return RareItems.GetEnumerator();
+            } else {
+                return (IEnumerator<TaggedItem>)Enumerable.Empty<TaggedItem>();
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
+            return GetEnumerator();
         }
     }
 }
