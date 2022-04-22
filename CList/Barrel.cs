@@ -5,50 +5,51 @@ using System.Text;
 using System.Threading.Tasks;
 using CommentedList.WeightedRandomizer;
 
-namespace CommentedList.CList;
-public class Barrel {
-    static Random RNG = new();
+namespace CommentedList.CList {
+    public class Barrel {
+        static Random RNG = new Random();
 
-    //TODO: combine to allow for simpler roundtrips
-    //TODO: allow more than 2 collections of items
-    public IWeightedRandomizer<TaggedItem>? Items;
-    public IWeightedRandomizer<TaggedItem>? RareItems;
+        //TODO: combine to allow for simpler roundtrips
+        //TODO: allow more than 2 collections of items
+        public IWeightedRandomizer<TaggedItem> Items;
+        public IWeightedRandomizer<TaggedItem> RareItems;
 
-    float RareChance = 1.0f/35f; // 1 in 35
+        double RareChance = 1.0f / 35f; // 1 in 35
 
-    //public Tags HeritableTags; // copied to things in PickOne()
+        //public Tags HeritableTags; // copied to things in PickOne()
 
-    public Barrel() { }
+        public Barrel() { }
 
-    public TaggedItem? PickOne() {
-        TaggedItem thing;
+        public TaggedItem PickOne() {
+            TaggedItem thing;
 
-        //todo: check RareChance doesn't make rare items more than half as common as regular
+            //todo: check RareChance doesn't make rare items more than half as common as regular
 
-        var rare = RNG.NextSingle() < RareChance;
-        if (rare && RareItems != null && RareItems.Any()) {
-            thing = RareItems.NextWithReplacement();
-        } else if (Items != null && Items.Any()) {
-            thing = Items.NextWithReplacement();
-        } else {
-            return null;
+            var rare = RNG.NextDouble() < RareChance;
+            if (rare && RareItems != null && RareItems.Any()) {
+                thing = RareItems.NextWithReplacement();
+            } else if (Items != null && Items.Any()) {
+                thing = Items.NextWithReplacement();
+            } else {
+                return null;
+            }
+            if (thing == null) return null;
+
+            //thing.CategoryTags = this.HeritableTags;
+
+            return thing;
         }
-        if (thing == null) return null;
 
-        //thing.CategoryTags = this.HeritableTags;
+        internal void Add(TaggedItem item, int weight = 1000) {
+            if (item == null) return;
 
-        return thing;
-    }
-
-    internal void Add(TaggedItem item, int weight = 1000) {
-        if (item == null) return;
-
-        if (item.IsRare()) {
-            if (RareItems == null) RareItems = new StaticWeightedRandomizer<TaggedItem>();
-            RareItems.Add(item, weight);
-        } else {
-            if (Items == null) Items = new StaticWeightedRandomizer<TaggedItem>();
-            Items.Add(item, weight);
+            if (item.IsRare()) {
+                if (RareItems == null) RareItems = new StaticWeightedRandomizer<TaggedItem>();
+                RareItems.Add(item, weight);
+            } else {
+                if (Items == null) Items = new StaticWeightedRandomizer<TaggedItem>();
+                Items.Add(item, weight);
+            }
         }
     }
 }
