@@ -40,15 +40,15 @@ public class Barrel {
         return thing;
     }
 
-    internal void Add(TaggedItem thing, int weight = 1000) {
-        if (thing == null) return;
+    internal void Add(TaggedItem item, int weight = 1000) {
+        if (item == null) return;
 
-        if (thing.IsRare()) {
+        if (item.IsRare()) {
             if (RareItems == null) RareItems = new StaticWeightedRandomizer<TaggedItem>();
-            RareItems.Add(thing, weight);
+            RareItems.Add(item, weight);
         } else {
             if (Items == null) Items = new StaticWeightedRandomizer<TaggedItem>();
-            Items.Add(thing, weight);
+            Items.Add(item, weight);
         }
     }
 }

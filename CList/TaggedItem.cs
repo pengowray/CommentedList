@@ -20,9 +20,9 @@ public class TaggedItem {
         return Name;
     }
 
-    public string ToDebugString() {
+    public string ToLine() {
         if (Tags != null) {
-            return $"{Name} ({Tags})";
+            return $"{Name} // {Tags}";
         }
         return $"{Name}";
     }
