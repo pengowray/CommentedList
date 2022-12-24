@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace CommentedList.Util {
     public static class PickOneExtensions {
@@ -21,6 +22,10 @@ namespace CommentedList.Util {
         }
 
 
+        public static T PickOne<T>(this IEnumerable<T> items) {
+            //TODO: seems messy
+            return items.Skip(Rand.Next(0, items.Count())).FirstOrDefault();
+        }
     }
 
 }

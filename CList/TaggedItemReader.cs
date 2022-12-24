@@ -23,12 +23,17 @@ namespace CommentedList.CList {
             XTags = xTags;
         }
 
+
+        public IEnumerable<TaggedItem> ReadFromStringContents(string txtData) {
+            var stringReader = new StringReader(txtData);
+            return Read(txtData);
+        }
+
         public IEnumerable<TaggedItem> Read(string filepath) {
             using (StreamReader file = new StreamReader(filepath)) {
                 foreach (var item in Read(file)) {
                     yield return item;
                 }
-                file.Close();
             }
         }
 
@@ -46,6 +51,7 @@ namespace CommentedList.CList {
                 //remove comments (TODO: allow escaped comments)
                 if (string.IsNullOrEmpty(line))
                     continue;
+                line = line.TrimEnd('\x1A', '\uFFFD'); // remove sub characters
 
                 var commentPos = line.IndexOf("//");
                 var comment = "";
