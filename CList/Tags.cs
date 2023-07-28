@@ -11,6 +11,7 @@ namespace CommentedList.CList {
         public Dictionary<string, string> Items; // json-esque
 
         public const string DefaultVal = "true";
+        public const string NoTagVal = "null"; // HasTag() returns false for this value
 
         //Tags:
         //"Cat:Noun"
@@ -37,17 +38,18 @@ namespace CommentedList.CList {
             Items?.Remove(tag);
         }
 
-        public string GetValue(string tag) {
-            //return Items?.GetValueOrDefault(tag);
-            
+        public string GetTag(string tag) {
             var success = Items.TryGetValue(tag, out var val);
             if (success) return val;
             return null;
         }
+        [Obsolete("renamed to GetTag(tag)")]
+        public string GetValue(string tag) { //TODO: rename GetTag()
+            return GetTag(tag);
+        }
 
         public bool HasTag(string tag) {
-            //TODO: don't count if value is 0 or false?
-            return Items != null && Items.ContainsKey(tag);
+            return Items != null && Items.ContainsKey(tag) && Items[tag] != NoTagVal;
         }
 
         public bool HasTrueTag(string tag) {

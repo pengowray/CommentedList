@@ -10,9 +10,9 @@ namespace CommentedList.CList {
     public class Barrel : IEnumerable<TaggedItem> { // : ICollection<TaggedItem> // TODO: implement ICollection
         static Random RNG = new Random();
 
-        //TODO: combine to allow for simpler roundtrips
-        //TODO: allow more than 2 collections of items
+        //TODO: use nested barrels via ABScope items.txt => "[items-common] // x35 \n [items-rare]"
         public IWeightedRandomizer<TaggedItem> Items;
+        [Obsolete("use other method [todo: make a RareBarrel class or something for easy switchover]")]
         public IWeightedRandomizer<TaggedItem> RareItems;
 
         double RareChance = 1.0f / 35f; // 1 in 35

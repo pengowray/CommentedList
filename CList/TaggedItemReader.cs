@@ -124,9 +124,7 @@ namespace CommentedList.CList {
                     }
                 }
 
-                var thing = new TaggedItem(line) {
-                    Tags = tags, // may be null but that's fine
-                };
+                var thing = new TaggedItem(line, tags); // tags may be null but that's fine
 
                 yield return thing;
             }

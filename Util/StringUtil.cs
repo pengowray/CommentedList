@@ -58,6 +58,7 @@ namespace CommentedList.Util {
                     soFar += codePointString;
                     zwj = false;
 
+                    //todo: do we need to use SpacingCombiningMark here too or not?
                 } else if (CharUnicodeInfo.GetUnicodeCategory(codePointString, 0) == UnicodeCategory.NonSpacingMark || CharUnicodeInfo.GetUnicodeCategory(codePointString, 0) == UnicodeCategory.SpacingCombiningMark) {
                     soFar += codePointString;
 
