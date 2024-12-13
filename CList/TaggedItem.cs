@@ -31,7 +31,7 @@ namespace CommentedList.CList {
         }
 
         public string GetTag(string tag) {
-            if (Tags != null) {
+            if (Tags == null) {
                 return null;
             }
             return Tags.GetTag(tag);

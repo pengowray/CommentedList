@@ -68,12 +68,12 @@ namespace CommentedList.CList {
                 Tags tags = null;
 
                 if (comment?.Contains("#") ?? false) {
-                    // At least 2 letters, start with letter, may contain numbers or underscore
+                    // At least 1 letter, start with letter, may contain numbers or underscore
                     // Allows tag values, e.g. "#cat:noun" or "#country:France"
-                    // todo: allow more characters if needed (e.g. dashes, periods)
+                    // todo: allow more characters if needed (e.g. dashes, periods), but only in middle for tag names
                     // todo: allow "double-quoted" tags and values
-                    // e.g. "#fun" => {fun: 1} or "#country:France" => {country: France}
-                    var matches = Regex.Matches(comment, @"[#]([A-Za-z][A-Za-z0-9_]+)(\:[A-Za-z0-9]+)?");
+                    // e.g. "#fun" => {fun: 1} or "#country":"France" => {country: France} or #city:"New York"
+                    var matches = Regex.Matches(comment, @"[#]([A-Za-z][A-Za-z0-9_]*)(\:[A-Za-z0-9\.\-_]+)?");
                     // for each match, only care about group 1 and 2, and not about captures
                     foreach (Match match in matches) {
 
@@ -96,8 +96,9 @@ namespace CommentedList.CList {
                             // count == 3
                             var hashtag = groups[1]?.Value;
                             var tagvalue = groups[2]?.Value;
-                            if (tagvalue?.Length > 1) tagvalue = tagvalue.Substring(1); // trim leading ':'
+                            if (tagvalue?.Length > 1) tagvalue = tagvalue.Substring(1); // remove leading ':'
                             tags.Add(hashtag, tagvalue);
+                            //Console.WriteLine($"adding {hashtag}:{tagvalue}"); // debug
                         }
                     }
                 }
@@ -109,7 +110,7 @@ namespace CommentedList.CList {
                     //allows negative/positive (though dubiously helpful)
                     //TODO: full floating point number regex: [+-]?(\d+([.]\d*)?([eE][+-]?\d+)?|[.]\d+([eE][+-]?\d+)?)
                     //TODO: compile regex
-                    var matches = Regex.Match(comment, @"[^|\W|#][Xx]([-\+]?[0-9\.]+)[\W|$]"); // e.g. "x10" or "x3.30."
+                    var matches = Regex.Match(comment, @"(?:^|\s|#)[xX]([-\+]?[0-9\.]+)(?:\W|$)"); // e.g. "x10" or "x3.30."
                     if (matches.Success) {
                         //TODO: more bounds checking
                         var numStr = matches?.Groups[1]?.Captures[0]?.Value;

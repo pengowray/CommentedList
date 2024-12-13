@@ -16,9 +16,27 @@ namespace CommentedList.CList {
         //Tags:
         //"Cat:Noun"
         //etc
-        //TODO: allow quotes, and maybe even braces e.g. { "Cat" : "Noun" }
+        //TODO: allow quotes, and maybe even json-style braces e.g. { "Cat" : "Noun" }
 
         public Tags() { }
+
+        public IEnumerable<string> Keys {
+            get {
+                if (Items != null) {
+                    return Items.Keys;
+                }
+                return new List<string>();
+            }
+        }
+
+        public IEnumerable<KeyValuePair<string, string>> Pairs {
+            get {
+                if (Items != null) {
+                    return Items;
+                }
+                return new List<KeyValuePair<string, string>>();
+            }
+        }
 
         public void Add(string tag) {
             if (tag == null) return;
@@ -43,6 +61,7 @@ namespace CommentedList.CList {
             if (success) return val;
             return null;
         }
+
         [Obsolete("renamed to GetTag(tag)")]
         public string GetValue(string tag) { //TODO: rename GetTag()
             return GetTag(tag);

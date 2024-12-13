@@ -68,5 +68,11 @@ namespace CommentedList.CList {
         IEnumerator IEnumerable.GetEnumerator() {
             return GetEnumerator();
         }
+
+        public TaggedItem GetItem(string itemText) {
+            // TODO: index by item text for faster lookup
+            return Items?.FirstOrDefault(i => i.Item == itemText) 
+                ?? RareItems?.FirstOrDefault(i => i.Item == itemText);
+        }
     }
 }

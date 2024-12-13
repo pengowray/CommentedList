@@ -45,7 +45,7 @@ namespace CommentedList.CList {
 
                 int weight = 1000; // [previously 90 for rare]
                 if (item.Tags?.HasTag("x") ?? false) {
-                    var numStr = item.Tags.GetValue("x");
+                    var numStr = item.GetTag("x");
                     if (Double.TryParse(numStr, out double multiplier)) {
                         weight = (int)(multiplier * weight);
                     }
